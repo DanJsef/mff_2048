@@ -11,7 +11,7 @@ class Engine():
         self.highest = 2
         self.tiles = 0
         self.moved = False
-        self.target = 0
+        self.target = None
 
         self.new_tile()
         self.new_tile()

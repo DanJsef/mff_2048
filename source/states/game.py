@@ -1,35 +1,33 @@
+import pygame as pg
 from ..templates import State
 from ..engine import Engine
 from ..setup import WIDTH, HEIGHT
-import pygame as pg
 
 
 class GameState(State):
     def __init__(self):
         State.__init__(self)
         pg.display.set_caption('2048 - Playing')
-        self.WIDTH, self.HEIGHT = WIDTH, HEIGHT
         self.DIMENSION = 4
         self.GAP = self.HEIGHT // self.DIMENSION // 8
         self.TILE_SIZE = (self.HEIGHT - 5*self.GAP) // self.DIMENSION
         self.engine = Engine()
-        self.engine.set_target(2048)
         self.COLORS = {
             ' ': 'grey',
-            2: 'red',
-            4: 'yellow',
-            8: 'brown',
-            16: 'green',
-            32: 'blue',
-            64: 'orange',
-            128: 'purple',
-            256: 'white',
-            512: 'pink',
-            1024: 'cyan',
-            2048: 'black',
+            2: (238, 228, 218),
+            4: (237, 224, 200),
+            8: (242, 177, 121),
+            16: (244, 149, 99),
+            32: (243, 124, 95),
+            64: (241, 93, 60),
+            128: (237, 207, 115),
+            256: (237, 204, 98),
+            512: (237, 204, 98),
+            1024: (237, 200, 80),
+            2048: (237, 194, 48),
         }
 
-    # RENDERING
+    # RENDERING FUNCTIONS
 
     def render_board(self, screen):
         for r in range(self.DIMENSION):
@@ -42,28 +40,36 @@ class GameState(State):
                 self.center_text(screen, str(value), posX, posY,
                                  self.TILE_SIZE, self.TILE_SIZE)
 
+    def render(self, screen):
+        self.render_background(screen)
+        self.render_board(screen)
+
     def user_input(self, event):
         if event.type == pg.KEYDOWN:
             input_key = pg.key.name(event.key)
-            if input_key == 'left':
+            if input_key == 'left' or input_key == 'a':
                 self.engine.move_left()
-            elif input_key == 'right':
+            elif input_key == 'right' or input_key == 'd':
                 self.engine.move_right()
-            elif input_key == 'down':
+            elif input_key == 'down' or input_key == 's':
                 self.engine.move_down()
-            elif input_key == 'up':
+            elif input_key == 'up' or input_key == 'w':
                 self.engine.move_up()
-            elif input_key == 'r':
-                self.engine.reset()
 
     def update(self, screen):
+        if not self.engine.target:
+            self.engine.target = State.target
 
         if self.engine.check_win():
             print("GAME WON")
+            self.next = 'win'
+            self.done = True
+            self.engine.reset()
 
         if self.engine.check_lose():
             print("NOT MOVABLE")
-            self.next = 'menu'
+            self.next = 'lose'
             self.done = True
+            self.engine.reset()
 
-        self.render_board(screen)
+        self.render(screen)
