@@ -2,6 +2,9 @@ import random
 
 
 class Engine():
+    """
+    Engine of the whole game. Stores the game board, handles proccess and updating the game board.
+    """
 
     def __init__(self):
         self.board = [[' ', ' ', ' ', ' '], [' ', ' ', ' ', ' '],
@@ -17,11 +20,19 @@ class Engine():
         self.new_tile()
 
     def reset(self):
+        """
+        Resets the game to default parameters.
+        """
         self.__init__()
 
-    # FUNCTIONS FOR WATCHING GAME STATE
+    # BOARD STATE WATCHING METHODS
 
     def check_lose(self):
+        """
+        Verifies if the game board is still playable.
+
+        Returns True if game is not playable anymore (False if is).
+        """
         if self.tiles == 16:
             for r in range(self.SIZE):
                 for c in range(self.SIZE):
@@ -32,14 +43,26 @@ class Engine():
             return True
 
     def check_win(self):
+        """
+        Verifies if the player won the game.
+
+        Returns True if game was won.
+        """
         if self.target == self.highest:
             return True
 
-    # RANDOM TILE ADDING FUNCTIONS
+    # RANDOM TILE ADDING METHODS
 
     def new_tile(self):
+        """
+        Adds a new tile to random position on game board. 
+        Tile value is either 2 (0.7 chance) or 4 (0.3 chance).  
+        """
         x = random.randrange(0, self.SIZE)
         y = random.randrange(0, self.SIZE)
+
+        # Generates new X,Y for as long as the possition is occupied on game board.
+        # This approach might cause slow runtime for bigger boards, when almost all possitions are occupied.
         while self.board[x][y] != ' ':
             x = random.randrange(0, self.SIZE)
             y = random.randrange(0, self.SIZE)
@@ -47,6 +70,11 @@ class Engine():
         self.tiles += 1
 
     def add_tile(self):
+        """
+        Handles adding new tile during game. 
+
+        Tile won't be added if any of current tiles didn't move.
+        """
         if self.moved:
             self.new_tile()
             self.moved = False
@@ -55,7 +83,7 @@ class Engine():
 
     def __compress(self):
         """
-        compresses tiles to the left
+        Compresses tiles to the left.
         """
         for r in range(self.SIZE):
             for c in range(self.SIZE):
@@ -69,7 +97,7 @@ class Engine():
 
     def __merge(self):
         """
-        merges tiles to the left and updates highest reached value
+        Merges tiles to the left and updates highest reached value.
         """
         for r in range(self.SIZE):
             for c in range(self.SIZE):
@@ -83,7 +111,7 @@ class Engine():
 
     def __transpose(self):
         """
-        transposes tile grid
+        Transposes tile grid.
         """
         result = [[' ', ' ', ' ', ' '], [' ', ' ', ' ', ' '],
                   [' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ']]
@@ -95,7 +123,7 @@ class Engine():
 
     def __reverse(self):
         """
-        reverses tile grid
+        Reverses tile grid.
         """
 
         for r in range(self.SIZE):
@@ -104,24 +132,36 @@ class Engine():
     # TILE MOVING FUNCTIONS
 
     def move_left(self):
+        """
+        Handles moving and merging tiles left.
+        """
         self.__compress()
         self.__merge()
         self.__compress()
         self.add_tile()
 
     def move_up(self):
+        """
+        Handles moving and merging tiles up.
+        """
         self.__transpose()
         self.move_left()
         self.__transpose()
         self.add_tile()
 
     def move_down(self):
+        """
+        Handles moving and merging tiles down.
+        """
         self.__transpose()
         self.move_right()
         self.__transpose()
         self.add_tile()
 
     def move_right(self):
+        """
+        Handles moving and merging tiles right.
+        """
         self.__reverse()
         self.move_left()
         self.__reverse()
@@ -130,7 +170,7 @@ class Engine():
     # SETTERS AND GETTERS
 
     def get_board_state(self):
+        """
+        Returns the current board state.
+        """
         return self.board
-
-    def set_target(self, value):
-        self.target = value

@@ -12,6 +12,12 @@ class MainMenu(Menu):
         self.background = (235, 155, 52)
 
     def user_input(self, event):
+        """
+        Handles events for main menu state.
+
+        Parameters:
+            event: event to proccess
+        """
         if event.type == pg.KEYDOWN:
             input_key = pg.key.name(event.key)
             if input_key == 'return':
@@ -30,6 +36,12 @@ class LoseMenu(Menu):
         self.background = (235, 70, 52)
 
     def user_input(self, event):
+        """
+        Handles events for lose menu state.
+
+        Parameters:
+            event: event to proccess
+        """
         if event.type == pg.KEYDOWN:
             input_key = pg.key.name(event.key)
             if input_key == 'return':
@@ -51,6 +63,12 @@ class WinMenu(Menu):
         self.background = (52, 235, 100)
 
     def user_input(self, event):
+        """
+        Handles events for win menu state.
+
+        Parameters:
+            event: event to proccess
+        """
         if event.type == pg.KEYDOWN:
             input_key = pg.key.name(event.key)
             if input_key == 'return':

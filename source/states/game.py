@@ -5,6 +5,10 @@ from ..setup import WIDTH, HEIGHT
 
 
 class GameState(State):
+    """
+    Gameplay state
+    """
+
     def __init__(self):
         State.__init__(self)
         pg.display.set_caption('2048 - Playing')
@@ -27,9 +31,13 @@ class GameState(State):
             2048: (237, 194, 48),
         }
 
-    # RENDERING FUNCTIONS
-
     def render_board(self, screen):
+        """
+        Handles drawing of the current state of board.
+
+        Parameters:
+            screen: screen to draw on
+        """
         for r in range(self.DIMENSION):
             for c in range(self.DIMENSION):
                 posX = r*self.TILE_SIZE + (r+1)*self.GAP
@@ -41,10 +49,22 @@ class GameState(State):
                                  self.TILE_SIZE, self.TILE_SIZE)
 
     def render(self, screen):
+        """
+        Handles executing game render methods in correct order.
+
+        Parameters:
+            screen: screen to draw on
+        """
         self.render_background(screen)
         self.render_board(screen)
 
     def user_input(self, event):
+        """
+        Handles events for game state.
+
+        Parameters:
+            event: event to proccess
+        """
         if event.type == pg.KEYDOWN:
             input_key = pg.key.name(event.key)
             if input_key == 'left' or input_key == 'a':
@@ -57,6 +77,12 @@ class GameState(State):
                 self.engine.move_up()
 
     def update(self, screen):
+        """
+        Handles updating of game state.
+
+        Parameters:
+            screen: screen to draw on
+        """
         if not self.engine.target:
             self.engine.target = State.target
 
