@@ -43,7 +43,7 @@ Aplikace je rozdělena do tří hlavních částí
 
 ## diagram architektury
 
-![diagram](./architecture.png)
+![diagram](./schema.png)
 
 ## setup
 
