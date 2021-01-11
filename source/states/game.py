@@ -1,7 +1,6 @@
 import pygame as pg
 from ..templates import State
 from ..engine import Engine
-from ..setup import WIDTH, HEIGHT
 
 
 class GameState(State):
