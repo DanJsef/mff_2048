@@ -4,9 +4,7 @@ Dokumentace zápočtové aplikace.
 
 Téma: Hra 2048
 
-Autor: [Daniel Josef](https://github.com/DanJsef)
-
-Cvičící: [Josef Starýchfojtů](https://github.com/starychfojtu)
+Autor: Daniel Josef
 
 # Ovládání
 
@@ -45,18 +43,72 @@ Aplikace je rozdělena do tří hlavních částí
 
 ## diagram architektury
 
-![enter image description here](./architecture.png)
-
-## main - obal aplikace
-
-Slouží jako obal a spouštěč celé aplikace.
-
-- Vytvoří instanci Control
-- Definuje názvy obrazovek
-- Spustí hlavní loop
+![diagram](./architecture.png)
 
 ## setup
 
 Definuje základní proměné okna aplikace a inicializuje modul PyGame.
 
-## control - manager obrazovek
+## templates
+
+Obsahuje základní třídy pro definování různých stavů aplikace.
+
+- State()
+  - základní třída
+  - obsahuje proměné a metody, které využívají všechny stavy
+- Menu(State)
+  - odvozena od State()
+  - rozšíření o další proměné a metody, které využivají všechny menu
+
+## menu
+
+Definuje tři různé menu. Všechny jsou odvozené od třídy Menu() z templates.
+
+- MainMenu()
+  - hlavní menu
+  - umožňuje volbu obtížností
+- WinMenu()
+  - předává informaci o výhře
+  - umožnňuje volbu mezi ukončením a restartem hry
+- LoseMenu()
+  - předává informaci o prohře
+  - umožnňuje volbu mezi ukončením a restartem hry
+
+## engine
+
+Definuje třidu Engine(), která uchovává informace o stavu hry a metody, které mohou stavem manipulovat.
+
+Stav hry je uložen pomocí vnořeného pole (self.board).
+
+Manipulační metody:
+
+- compress()
+  - posune políčka směrem doleva tak, aby mezi nimi nebyly mezery
+- merge()
+  - směrem doleva spojí políčka, která se dotýkají a mají stejné hodnoty
+- transpose()
+  - transponuje mřížku herní plochy
+- reverse()
+  - zrcadlově otočí mřížku herní plochy (zleva doprava)
+
+Pomocí kombinace těchto metod je následně možné simulovat spojení políček v libovolném ze čtyř směrů.
+
+## game
+
+Zajišťuje vykreslování a ovládání hry.
+
+Zároveň inicializuje engine a stará se o spouštění metod enginu ve sprvánou chvíli.
+
+## control
+
+Zajišťuje vykreslování jednotlivých stavů hry a zároveň přepínání mezi nimi.
+
+Definuje základní event handling a loop aplikace.
+
+## main
+
+Slouží jako obal a spouštěč celé aplikace.
+
+- Vytvoří instanci Control
+- Definuje názvy stavů
+- Spustí hlavní loop

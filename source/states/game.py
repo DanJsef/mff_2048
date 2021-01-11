@@ -1,6 +1,7 @@
 import pygame as pg
 from ..templates import State
 from ..engine import Engine
+from ..setup import WIDTH, HEIGHT
 
 
 class GameState(State):
@@ -10,7 +11,6 @@ class GameState(State):
 
     def __init__(self):
         State.__init__(self)
-        pg.display.set_caption('2048 - Playing')
         self.DIMENSION = 4
         self.GAP = self.HEIGHT // self.DIMENSION // 8
         self.TILE_SIZE = (self.HEIGHT - 5*self.GAP) // self.DIMENSION
